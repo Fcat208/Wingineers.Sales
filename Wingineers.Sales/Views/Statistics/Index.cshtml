@@ -1,0 +1,40 @@
+﻿@model List<Wingineers.Sales.ViewModels.MonthlyOrderCount>
+
+<h1>Ordrer pr. måned</h1>
+
+<canvas id="ordersChart" height="100"></canvas>
+
+<table class="table">
+    <tr>
+        <th>Måned</th>
+        <th>Antal ordrer</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Month.ToString("MMMM yyyy", System.Globalization.CultureInfo.InvariantCulture)</td>
+            <td>@item.OrderCount</td>
+        </tr>
+    }
+</table>
+
+<p>I alt: @Model.Sum(m => m.OrderCount) ordrer</p>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+    <script>
+        const labels = @Json.Serialize(Model.Select(m => m.Month.ToString("MMM yyyy", System.Globalization.CultureInfo.InvariantCulture)));
+        const counts = @Json.Serialize(Model.Select(m => m.OrderCount));
+
+        new Chart(document.getElementById('ordersChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{ label: 'Antal ordrer', data: counts }]
+            },
+            options: {
+                scales: { y: { beginAtZero: true } }
+            }
+        });
+    </script>
+}

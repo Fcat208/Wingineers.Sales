@@ -1,0 +1,21 @@
+﻿@model List<Wingineers.Sales.ViewModels.SalesPersonListItem>
+
+<h1>Sælgere</h1>
+
+<table class="table">
+    <tr>
+        <th>Navn</th>
+        <th>Antal ordrer</th>
+        <th>Ordrer før ansættelse</th>
+        <th></th>
+    </tr>
+    @foreach (var person in Model)
+    {
+        <tr>
+            <td>@person.Name</td>
+            <td>@person.OrderCount</td>
+            <td class="@(person.OrdersBeforeHire > 0 ? "text-danger" : "")">@person.OrdersBeforeHire</td>
+            <td><a asp-action="Details" asp-route-id="@person.Id">Se detaljer</a></td>
+        </tr>
+    }
+</table>

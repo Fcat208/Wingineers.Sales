@@ -1,0 +1,40 @@
+﻿@model Wingineers.Sales.ViewModels.SalesPersonDetailsViewModel
+
+<h1>@Model.SalesPerson.Name</h1>
+
+<p>
+    Ansat: @Model.SalesPerson.HireDate<br />
+    Adresse: @Model.SalesPerson.Address, @Model.SalesPerson.ZipCode @Model.SalesPerson.City
+</p>
+
+<h2>Ordrer (@Model.Orders.Count)</h2>
+@if (Model.OrdersBeforeHire > 0)
+{
+    <p class="text-danger">
+        @Model.OrdersBeforeHire af @Model.Orders.Count ordrer ligger før ansættelsesdatoen. Ordren eller ansættelsesdatoen er forkert.
+    </p>
+}
+<table class="table">
+    <tr>
+        <th>Ordre-nr.</th>
+        <th>Dato</th>
+        <th>Produkt</th>
+        <th>Pris</th>
+        <th>Bemærkning</th>
+    </tr>
+    @foreach (var order in Model.Orders)
+    {
+        <tr>
+            <td>@order.Id</td>
+            <td>@order.GetOrderDate().ToString("dd-MM-yyyy HH:mm")</td>
+            <td>@order.OrderName</td>
+            <td>@order.OrderPrice.ToString("N0")</td>
+            <td>
+                @if (order.IsBeforeHireDate(Model.SalesPerson))
+                {
+                    <span class="text-danger">Før ansættelse</span>
+                }
+            </td>
+        </tr>
+    }
+</table>
